@@ -32,37 +32,37 @@ namespace stone_and_metal
 
         }
 
-        private void settingToolStripMenuItem_Click(object sender, EventArgs e)
+        private void objectToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void doxToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Site_reportsToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void справкаToolStripMenuItem_Click(object sender, EventArgs e)
+        private void reportsToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void видToolStripMenuItem_Click(object sender, EventArgs e)
+        private void dataToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void экспортToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void данныеToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void справочникиToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ReferenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
