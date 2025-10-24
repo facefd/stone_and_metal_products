@@ -120,6 +120,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="help.txt" />
     <Content Include="stone_and_metal.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
