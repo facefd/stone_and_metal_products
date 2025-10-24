@@ -25,7 +25,11 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem(); // Это родительский элемент
+            this.themeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem(); // Новое
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator(); // Новое
+            this.increaseFontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem(); // Новое
+            this.decreaseFontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem(); // Новое
             this.databaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,7 +51,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem,
+            this.viewToolStripMenuItem, // Обновлено
             this.databaseToolStripMenuItem,
             this.dataToolStripMenuItem,
             this.helpToolStripMenuItem});
@@ -56,6 +60,7 @@
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // fileToolStripMenuItem
             // 
@@ -119,7 +124,11 @@
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ViewToolStripMenuItem});
+            this.ViewToolStripMenuItem, // Это "Настройки"
+            this.themeToolStripMenuItem, // Новое
+            this.toolStripSeparator3, // Новое
+            this.increaseFontToolStripMenuItem, // Новое
+            this.decreaseFontToolStripMenuItem}); // Новое
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.viewToolStripMenuItem.Text = "Вид";
@@ -127,9 +136,35 @@
             // ViewToolStripMenuItem
             // 
             this.ViewToolStripMenuItem.Name = "ViewToolStripMenuItem";
-            this.ViewToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.ViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ViewToolStripMenuItem.Text = "Настройки";
-            this.ViewToolStripMenuItem.Click += new System.EventHandler(this.ViewToolStripMenuItem_Click);
+            this.ViewToolStripMenuItem.Click += new System.EventHandler(this.ViewToolStripMenuItem_Click); // Это заглушка
+            // 
+            // themeToolStripMenuItem
+            // 
+            this.themeToolStripMenuItem.Name = "themeToolStripMenuItem";
+            this.themeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.themeToolStripMenuItem.Text = "Тема (тёмная/светлая)";
+            this.themeToolStripMenuItem.Click += new System.EventHandler(this.themeToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
+            // increaseFontToolStripMenuItem
+            // 
+            this.increaseFontToolStripMenuItem.Name = "increaseFontToolStripMenuItem";
+            this.increaseFontToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.increaseFontToolStripMenuItem.Text = "Увеличить шрифт";
+            this.increaseFontToolStripMenuItem.Click += new System.EventHandler(this.increaseFontToolStripMenuItem_Click);
+            // 
+            // decreaseFontToolStripMenuItem
+            // 
+            this.decreaseFontToolStripMenuItem.Name = "decreaseFontToolStripMenuItem";
+            this.decreaseFontToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.decreaseFontToolStripMenuItem.Text = "Уменьшить шрифт";
+            this.decreaseFontToolStripMenuItem.Click += new System.EventHandler(this.decreaseFontToolStripMenuItem_Click);
             // 
             // databaseToolStripMenuItem
             // 
@@ -269,8 +304,12 @@
         private System.Windows.Forms.ToolStripMenuItem connectBDToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ViewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem; // Обновлено
+        private System.Windows.Forms.ToolStripMenuItem ViewToolStripMenuItem; // Это "Настройки"
+        private System.Windows.Forms.ToolStripMenuItem themeToolStripMenuItem; // Новое
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3; // Новое
+        private System.Windows.Forms.ToolStripMenuItem increaseFontToolStripMenuItem; // Новое
+        private System.Windows.Forms.ToolStripMenuItem decreaseFontToolStripMenuItem; // Новое
         private System.Windows.Forms.ToolStripMenuItem databaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SaveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dataToolStripMenuItem;

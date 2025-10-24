@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -33,6 +34,8 @@ namespace stone_and_metal
         private void Form1_Load(object sender, EventArgs e)
         {
             LoadData();
+            // Применить текущую тему при загрузке (по умолчанию светлая)
+            ThemeManager.ApplyCurrentTheme(this, dataGridView1, btnSave, menuStrip1);
         }
 
         private void LoadData()
@@ -201,8 +204,46 @@ namespace stone_and_metal
             return null;
         }
 
+        // =============== НОВОЕ: Вид ===============
+
+        private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Это родительский элемент, кликать по нему не нужно
+        }
+
+        // Подменю: Тема
+        private void themeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ThemeManager.ToggleTheme(this, dataGridView1, btnSave, menuStrip1);
+            MessageBox.Show($"Тема {(ThemeManager.IsDarkMode ? "тёмная" : "светлая")} включена!", "Вид", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        // Подменю: Увеличить шрифт
+        private void increaseFontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var currentFont = this.Font;
+            this.Font = new Font(currentFont.FontFamily, currentFont.Size + 1, currentFont.Style);
+            dataGridView1.Font = new Font(dataGridView1.Font.FontFamily, dataGridView1.Font.Size + 1);
+            MessageBox.Show($"Шрифт увеличен до {this.Font.Size}!", "Вид", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        // Подменю: Уменьшить шрифт
+        private void decreaseFontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var currentFont = this.Font;
+            if (currentFont.Size > 6) // Минимальный размер
+            {
+                this.Font = new Font(currentFont.FontFamily, currentFont.Size - 1, currentFont.Style);
+                dataGridView1.Font = new Font(dataGridView1.Font.FontFamily, dataGridView1.Font.Size - 1);
+                MessageBox.Show($"Шрифт уменьшен до {this.Font.Size}!", "Вид", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Шрифт уже минимального размера!", "Вид", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         // Заглушки
-        private void ViewToolStripMenuItem_Click(object sender, EventArgs e) { }
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e) { }
         private void menuToolStripMenuItem_Click(object sender, EventArgs e) { }
         private void Site_reportsToolStripMenuItem_Click(object sender, EventArgs e) { }
