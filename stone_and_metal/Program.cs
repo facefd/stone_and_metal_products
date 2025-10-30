@@ -9,7 +9,8 @@ namespace stone_and_metal
         [STAThread]
         static void Main()
         {
-            try
+            Application.Run(new Form1());
+            /*try
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -23,7 +24,8 @@ namespace stone_and_metal
             catch (Exception ex)
             {
                 MessageBox.Show($"Критическая ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+           }
+       */
         }
     }
 }
