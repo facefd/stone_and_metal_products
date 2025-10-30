@@ -1,4 +1,5 @@
-﻿using System;
+﻿// DeveloperInfo.cs
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -51,69 +52,27 @@ namespace stone_and_metal
             {
                 pb.Image = Image.FromFile(logoPath);
             }
-            else
-            {
-                pb.Image = null;
-            }
         }
 
-        private void linkLabelDev1Email_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            OpenEmail("aface_shot@mail.ru");
-        }
-
-        private void linkLabelDev1Phone_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            OpenPhone("+79107207154");
-        }
-
-        private void linkLabelDev2Email_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            OpenEmail("iDK@example.com");
-        }
-
-        private void linkLabelDev2Phone_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            OpenPhone("+88005553535");
-        }
-
-        private void linkLabelDev3Email_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            OpenEmail("sidorov@example.com");
-        }
-
-        private void linkLabelDev3Phone_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            OpenPhone("+71234567892");
-        }
+        private void linkLabelDev1Email_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => OpenEmail("aface_shot@mail.ru");
+        private void linkLabelDev1Phone_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => OpenPhone("+79107207154");
+        private void linkLabelDev2Email_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => OpenEmail("iDK@example.com");
+        private void linkLabelDev2Phone_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => OpenPhone("+88005553535");
+        private void linkLabelDev3Email_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => OpenEmail("sidorov@example.com");
+        private void linkLabelDev3Phone_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => OpenPhone("+71234567892");
 
         private void OpenEmail(string email)
         {
-            try
-            {
-                Process.Start(new ProcessStartInfo("mailto:" + email) { UseShellExecute = true });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Не удалось открыть почту: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            try { Process.Start(new ProcessStartInfo("mailto:" + email) { UseShellExecute = true }); }
+            catch { MessageBox.Show("Не удалось открыть почту.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }
 
         private void OpenPhone(string phone)
         {
-            try
-            {
-                Process.Start(new ProcessStartInfo("tel:" + phone) { UseShellExecute = true });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Не удалось открыть телефон: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            try { Process.Start(new ProcessStartInfo("tel:" + phone) { UseShellExecute = true }); }
+            catch { MessageBox.Show("Не удалось открыть телефон.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
         }
 
-        private void buttonOK_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        private void buttonOK_Click(object sender, EventArgs e) => this.Close();
     }
 }

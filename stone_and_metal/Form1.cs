@@ -155,8 +155,8 @@ namespace stone_and_metal
 
         private void ContentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var cert = new Certificate();
-            cert.ShowHelp();
+            var helpForm = new HelpForm();
+            helpForm.ShowDialog();
         }
 
         private void DeveloperToolStripMenuItem_Click(object sender, EventArgs e)
@@ -167,16 +167,20 @@ namespace stone_and_metal
 
         private void objectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Раздел 'Объекты учёта' будет реализован позже.", "Инфо", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var accountingObjects = new AccountingObjects();
+            accountingObjects.ShowDialog();
         }
 
         private void ReferenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var referenceBooks = new ReferenceBooks();
+            referenceBooks.ShowDialog();
         }
 
         private void reportsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Раздел 'Отчёты' будет реализован позже.", "Инфо", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var reports = new Reports();
+            reports.ShowDialog();
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -206,16 +210,26 @@ namespace stone_and_metal
 
         // =============== НОВОЕ: Вид ===============
 
+        // Это родительский элемент, кликать по нему не нужно
         private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Это родительский элемент, кликать по нему не нужно
+        }
+
+        // Подменю: Настройки
+        private void ViewSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var settings = new Settings(accessDatabasePath);
+            if (settings.ShowDialog() == DialogResult.OK)
+            {
+                settings.ApplySettings(this, dataGridView1, btnSave, menuStrip1);
+            }
         }
 
         // Подменю: Тема
         private void themeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ThemeManager.ToggleTheme(this, dataGridView1, btnSave, menuStrip1);
-            MessageBox.Show($"Тема {(ThemeManager.IsDarkMode ? "тёмная" : "светлая")} включена!", "Вид", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // MessageBox.Show($"Тема {(ThemeManager.IsDarkMode ? "тёмная" : "светлая")} включена!", "Вид", MessageBoxButtons.OK, MessageBoxIcon.Information); // УБРАНО!
         }
 
         // Подменю: Увеличить шрифт

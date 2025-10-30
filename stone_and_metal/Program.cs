@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Program.cs
+using System;
 using System.Windows.Forms;
 
 namespace stone_and_metal
@@ -12,7 +13,12 @@ namespace stone_and_metal
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1());
+
+                var loginForm = new LoginForm();
+                if (loginForm.ShowDialog() == DialogResult.OK)
+                {
+                    Application.Run(new Form1());
+                }
             }
             catch (Exception ex)
             {
