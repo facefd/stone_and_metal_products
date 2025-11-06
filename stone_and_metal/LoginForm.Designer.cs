@@ -1,9 +1,4 @@
-﻿// LoginForm.Designer.cs
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-
-namespace stone_and_metal
+﻿namespace stone_and_metal
 {
     partial class LoginForm
     {
@@ -29,70 +24,70 @@ namespace stone_and_metal
             this.linkLabelRegister = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
 
-            // labelLogin
             this.labelLogin.AutoSize = true;
-            this.labelLogin.Location = new System.Drawing.Point(20, 20);
+            this.labelLogin.Location = new System.Drawing.Point(20, 30);
             this.labelLogin.Name = "labelLogin";
-            this.labelLogin.Size = new System.Drawing.Size(38, 13);
+            this.labelLogin.Size = new System.Drawing.Size(41, 13);
+            this.labelLogin.TabIndex = 0;
             this.labelLogin.Text = "Логин:";
 
-            // textBoxLogin
-            this.textBoxLogin.Location = new System.Drawing.Point(80, 17);
+            this.textBoxLogin.Location = new System.Drawing.Point(80, 27);
             this.textBoxLogin.Name = "textBoxLogin";
-            this.textBoxLogin.Size = new System.Drawing.Size(200, 20);
+            this.textBoxLogin.Size = new System.Drawing.Size(180, 20);
+            this.textBoxLogin.TabIndex = 1;
 
-            // labelPassword
             this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(20, 50);
+            this.labelPassword.Location = new System.Drawing.Point(20, 60);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(48, 13);
+            this.labelPassword.TabIndex = 2;
             this.labelPassword.Text = "Пароль:";
 
-            // textBoxPassword
-            this.textBoxPassword.Location = new System.Drawing.Point(80, 47);
+            this.textBoxPassword.Location = new System.Drawing.Point(80, 57);
             this.textBoxPassword.Name = "textBoxPassword";
-            this.textBoxPassword.Size = new System.Drawing.Size(200, 20);
             this.textBoxPassword.PasswordChar = '*';
+            this.textBoxPassword.Size = new System.Drawing.Size(180, 20);
+            this.textBoxPassword.TabIndex = 3;
 
-            // buttonLogin
-            this.buttonLogin.Location = new System.Drawing.Point(80, 80);
+            this.buttonLogin.Location = new System.Drawing.Point(20, 90);
             this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Size = new System.Drawing.Size(75, 23);
+            this.buttonLogin.Size = new System.Drawing.Size(100, 23);
+            this.buttonLogin.TabIndex = 4;
             this.buttonLogin.Text = "Войти";
+            this.buttonLogin.UseVisualStyleBackColor = true;
             this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
 
-            // buttonRegister
-            this.buttonRegister.Location = new System.Drawing.Point(165, 80);
+            this.buttonRegister.Location = new System.Drawing.Point(126, 90);
             this.buttonRegister.Name = "buttonRegister";
-            this.buttonRegister.Size = new System.Drawing.Size(115, 23);
+            this.buttonRegister.Size = new System.Drawing.Size(134, 23);
+            this.buttonRegister.TabIndex = 5;
             this.buttonRegister.Text = "Регистрация";
+            this.buttonRegister.UseVisualStyleBackColor = true;
             this.buttonRegister.Click += new System.EventHandler(this.buttonRegister_Click);
 
-            // linkLabelRegister
-            this.linkLabelRegister.Location = new System.Drawing.Point(80, 110);
+            this.linkLabelRegister.AutoSize = true;
+            this.linkLabelRegister.Location = new System.Drawing.Point(20, 120);
             this.linkLabelRegister.Name = "linkLabelRegister";
-            this.linkLabelRegister.Size = new System.Drawing.Size(200, 23);
+            this.linkLabelRegister.Size = new System.Drawing.Size(125, 13);
+            this.linkLabelRegister.TabIndex = 6;
             this.linkLabelRegister.TabStop = true;
-            this.linkLabelRegister.Text = "Еще нет аккаунта? Зарегистрируйтесь!";
-            this.linkLabelRegister.LinkClicked += new LinkLabelLinkClickedEventHandler(this.linkLabelRegister_LinkClicked);
+            this.linkLabelRegister.Text = "Еще нет аккаунта?";
+            this.linkLabelRegister.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelRegister_LinkClicked);
 
-            // LoginForm
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(300, 140);
-            this.Controls.Add(this.labelLogin);
-            this.Controls.Add(this.textBoxLogin);
-            this.Controls.Add(this.labelPassword);
-            this.Controls.Add(this.textBoxPassword);
-            this.Controls.Add(this.buttonLogin);
-            this.Controls.Add(this.buttonRegister);
+            this.ClientSize = new System.Drawing.Size(284, 150);
             this.Controls.Add(this.linkLabelRegister);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.Controls.Add(this.buttonRegister);
+            this.Controls.Add(this.buttonLogin);
+            this.Controls.Add(this.textBoxPassword);
+            this.Controls.Add(this.labelPassword);
+            this.Controls.Add(this.textBoxLogin);
+            this.Controls.Add(this.labelLogin);
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Вход";
+            this.Load += new System.EventHandler(this.LoginForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
         }

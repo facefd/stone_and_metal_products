@@ -13,6 +13,8 @@ namespace stone_and_metal
 
         private void DataForm_Load(object sender, EventArgs e)
         {
+            // Инициализируем БД
+            DatabaseHelper.InitializeDatabase();
             RefreshDataGrid();
         }
 

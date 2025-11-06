@@ -110,7 +110,7 @@ namespace stone_and_metal
             this.Controls.Add(this.textBoxName);
             this.Name = "DataForm";
             this.Text = "Данные";
-            this.Load += new System.EventHandler(this.DataForm_Load); // ← Вот это!
+            this.Load += new System.EventHandler(this.DataForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

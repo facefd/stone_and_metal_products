@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Form1.cs
+using System;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
@@ -11,7 +12,7 @@ namespace stone_and_metal
     {
         private string accessDatabasePath;
         private DataTable dataTable;
-        private string connectionString; // Убран readonly
+        private string connectionString;
 
         public Form1()
         {
@@ -210,11 +211,6 @@ namespace stone_and_metal
 
         // =============== НОВОЕ: Вид ===============
 
-        // Это родительский элемент, кликать по нему не нужно
-        private void ViewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
         // Подменю: Настройки
         private void ViewSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -229,7 +225,6 @@ namespace stone_and_metal
         private void themeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ThemeManager.ToggleTheme(this, dataGridView1, btnSave, menuStrip1);
-            // MessageBox.Show($"Тема {(ThemeManager.IsDarkMode ? "тёмная" : "светлая")} включена!", "Вид", MessageBoxButtons.OK, MessageBoxIcon.Information); // УБРАНО!
         }
 
         // Подменю: Увеличить шрифт
@@ -238,7 +233,6 @@ namespace stone_and_metal
             var currentFont = this.Font;
             this.Font = new Font(currentFont.FontFamily, currentFont.Size + 1, currentFont.Style);
             dataGridView1.Font = new Font(dataGridView1.Font.FontFamily, dataGridView1.Font.Size + 1);
-            MessageBox.Show($"Шрифт увеличен до {this.Font.Size}!", "Вид", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         // Подменю: Уменьшить шрифт
@@ -249,7 +243,6 @@ namespace stone_and_metal
             {
                 this.Font = new Font(currentFont.FontFamily, currentFont.Size - 1, currentFont.Style);
                 dataGridView1.Font = new Font(dataGridView1.Font.FontFamily, dataGridView1.Font.Size - 1);
-                MessageBox.Show($"Шрифт уменьшен до {this.Font.Size}!", "Вид", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -265,5 +258,10 @@ namespace stone_and_metal
         private void database1DataSetBindingSource_CurrentChanged(object sender, EventArgs e) { }
         private void DataBaseToolStripMenuItem_Click(object sender, EventArgs e) { }
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e) { btnSave_Click(sender, e); }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

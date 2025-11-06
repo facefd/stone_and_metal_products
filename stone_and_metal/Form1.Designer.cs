@@ -18,20 +18,18 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SavedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem(); // ← ЕДИНСТВЕННЫЙ правильный элемент
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.connectBDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ViewSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem(); // Новое имя
-            this.themeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem(); // Новое
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator(); // Новое
-            this.increaseFontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem(); // Новое
-            this.decreaseFontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem(); // Новое
+            this.ViewSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.themeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.increaseFontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.decreaseFontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.objectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ReferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,12 +44,11 @@
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            // 
+
             // menuStrip1
-            // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem, // Обновлено
+            this.viewToolStripMenuItem,
             this.databaseToolStripMenuItem,
             this.dataToolStripMenuItem,
             this.helpToolStripMenuItem});
@@ -61,13 +58,11 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
-            // 
+
             // fileToolStripMenuItem
-            // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.OpenToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.SavedToolStripMenuItem,
+            this.saveToolStripMenuItem, // ← Используется здесь
             this.toolStripSeparator1,
             this.connectBDToolStripMenuItem,
             this.toolStripSeparator2,
@@ -75,153 +70,120 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.fileToolStripMenuItem.Text = "Файл";
-            // 
+
             // OpenToolStripMenuItem
-            // 
             this.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem";
-            this.OpenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.OpenToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.OpenToolStripMenuItem.Text = "Открыть";
             this.OpenToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
-            // 
-            // saveToolStripMenuItem
-            // 
+
+            // saveToolStripMenuItem — ПРАВИЛЬНОЕ ИМЯ
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.saveToolStripMenuItem.Text = "Сохранить";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // SavedToolStripMenuItem
-            // 
-            this.SavedToolStripMenuItem.Name = "SavedToolStripMenuItem";
-            this.SavedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.SavedToolStripMenuItem.Text = "Сохранить как";
-            this.SavedToolStripMenuItem.Click += new System.EventHandler(this.SavedToolStripMenuItem_Click);
-            // 
+
             // toolStripSeparator1
-            // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
-            // 
+            this.toolStripSeparator1.Size = new System.Drawing.Size(151, 6);
+
             // connectBDToolStripMenuItem
-            // 
             this.connectBDToolStripMenuItem.Name = "connectBDToolStripMenuItem";
-            this.connectBDToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.connectBDToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.connectBDToolStripMenuItem.Text = "Связь с БД";
             this.connectBDToolStripMenuItem.Click += new System.EventHandler(this.connectBDToolStripMenuItem_Click);
-            // 
+
             // toolStripSeparator2
-            // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
-            // 
+            this.toolStripSeparator2.Size = new System.Drawing.Size(151, 6);
+
             // exitToolStripMenuItem
-            // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.exitToolStripMenuItem.Text = "Выход";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
+
             // viewToolStripMenuItem
-            // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ViewSettingsToolStripMenuItem, // Новое имя
-            this.themeToolStripMenuItem, // Новое
-            this.toolStripSeparator3, // Новое
-            this.increaseFontToolStripMenuItem, // Новое
-            this.decreaseFontToolStripMenuItem}); // Новое
+            this.ViewSettingsToolStripMenuItem,
+            this.themeToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.increaseFontToolStripMenuItem,
+            this.decreaseFontToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.viewToolStripMenuItem.Text = "Вид";
-            // 
+
             // ViewSettingsToolStripMenuItem
-            // 
             this.ViewSettingsToolStripMenuItem.Name = "ViewSettingsToolStripMenuItem";
-            this.ViewSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ViewSettingsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.ViewSettingsToolStripMenuItem.Text = "Настройки";
-            this.ViewSettingsToolStripMenuItem.Click += new System.EventHandler(this.ViewSettingsToolStripMenuItem_Click); // Новое имя
-            // 
+            this.ViewSettingsToolStripMenuItem.Click += new System.EventHandler(this.ViewSettingsToolStripMenuItem_Click);
+
             // themeToolStripMenuItem
-            // 
             this.themeToolStripMenuItem.Name = "themeToolStripMenuItem";
-            this.themeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.themeToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.themeToolStripMenuItem.Text = "Тема (тёмная/светлая)";
             this.themeToolStripMenuItem.Click += new System.EventHandler(this.themeToolStripMenuItem_Click);
-            // 
+
             // toolStripSeparator3
-            // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
-            // 
+            this.toolStripSeparator3.Size = new System.Drawing.Size(195, 6);
+
             // increaseFontToolStripMenuItem
-            // 
             this.increaseFontToolStripMenuItem.Name = "increaseFontToolStripMenuItem";
-            this.increaseFontToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.increaseFontToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.increaseFontToolStripMenuItem.Text = "Увеличить шрифт";
             this.increaseFontToolStripMenuItem.Click += new System.EventHandler(this.increaseFontToolStripMenuItem_Click);
-            // 
+
             // decreaseFontToolStripMenuItem
-            // 
             this.decreaseFontToolStripMenuItem.Name = "decreaseFontToolStripMenuItem";
-            this.decreaseFontToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.decreaseFontToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.decreaseFontToolStripMenuItem.Text = "Уменьшить шрифт";
             this.decreaseFontToolStripMenuItem.Click += new System.EventHandler(this.decreaseFontToolStripMenuItem_Click);
-            // 
+
             // databaseToolStripMenuItem
-            // 
             this.databaseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.SaveToolStripMenuItem});
+            this.saveToolStripMenuItem}); // ← Опять же, используется saveToolStripMenuItem
             this.databaseToolStripMenuItem.Name = "databaseToolStripMenuItem";
-            this.databaseToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
+            this.databaseToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.databaseToolStripMenuItem.Text = "База Д.";
-            // 
-            // SaveToolStripMenuItem
-            // 
-            this.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
-            this.SaveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.SaveToolStripMenuItem.Text = "Сохранить";
-            this.SaveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
-            // 
+
             // dataToolStripMenuItem
-            // 
             this.dataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.objectToolStripMenuItem,
             this.ReferenceToolStripMenuItem,
             this.reportsToolStripMenuItem,
             this.exportToolStripMenuItem});
             this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
-            this.dataToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.dataToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.dataToolStripMenuItem.Text = "Данные";
-            // 
+
             // objectToolStripMenuItem
-            // 
             this.objectToolStripMenuItem.Name = "objectToolStripMenuItem";
-            this.objectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.objectToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.objectToolStripMenuItem.Text = "Объекты учёта";
             this.objectToolStripMenuItem.Click += new System.EventHandler(this.objectToolStripMenuItem_Click);
-            // 
+
             // ReferenceToolStripMenuItem
-            // 
             this.ReferenceToolStripMenuItem.Name = "ReferenceToolStripMenuItem";
-            this.ReferenceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ReferenceToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.ReferenceToolStripMenuItem.Text = "Справочники";
             this.ReferenceToolStripMenuItem.Click += new System.EventHandler(this.ReferenceToolStripMenuItem_Click);
-            // 
+
             // reportsToolStripMenuItem
-            // 
             this.reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
-            this.reportsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reportsToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.reportsToolStripMenuItem.Text = "Отчёты";
             this.reportsToolStripMenuItem.Click += new System.EventHandler(this.reportsToolStripMenuItem_Click);
-            // 
+
             // exportToolStripMenuItem
-            // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.exportToolStripMenuItem.Text = "Экспорт";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
-            // 
+
             // helpToolStripMenuItem
-            // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.About_the_ProgramToolStripMenuItem,
             this.ContentToolStripMenuItem,
@@ -229,32 +191,26 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.helpToolStripMenuItem.Text = "Справка";
-            // 
+
             // About_the_ProgramToolStripMenuItem
-            // 
             this.About_the_ProgramToolStripMenuItem.Name = "About_the_ProgramToolStripMenuItem";
-            this.About_the_ProgramToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.About_the_ProgramToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.About_the_ProgramToolStripMenuItem.Text = "О программе";
             this.About_the_ProgramToolStripMenuItem.Click += new System.EventHandler(this.About_the_ProgramToolStripMenuItem_Click);
-            // 
+
             // ContentToolStripMenuItem
-            // 
             this.ContentToolStripMenuItem.Name = "ContentToolStripMenuItem";
-            this.ContentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ContentToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.ContentToolStripMenuItem.Text = "Содержание";
             this.ContentToolStripMenuItem.Click += new System.EventHandler(this.ContentToolStripMenuItem_Click);
-            // 
+
             // DeveloperToolStripMenuItem
-            // 
             this.DeveloperToolStripMenuItem.Name = "DeveloperToolStripMenuItem";
-            this.DeveloperToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.DeveloperToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.DeveloperToolStripMenuItem.Text = "О разработчике";
             this.DeveloperToolStripMenuItem.Click += new System.EventHandler(this.DeveloperToolStripMenuItem_Click);
-            // 
+
             // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = true;
-            this.dataGridView1.AllowUserToDeleteRows = true;
             this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -263,9 +219,9 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(776, 380);
             this.dataGridView1.TabIndex = 1;
-            // 
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+
             // btnSave
-            // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.Location = new System.Drawing.Point(713, 413);
             this.btnSave.Name = "btnSave";
@@ -274,9 +230,8 @@
             this.btnSave.Text = "Сохранить";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
+
             // Form1
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
@@ -292,26 +247,23 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem SavedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem; // ← ЕДИНСТВЕННЫЙ ЭЛЕМЕНТ
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem connectBDToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem; // Обновлено
-        private System.Windows.Forms.ToolStripMenuItem ViewSettingsToolStripMenuItem; // Новое имя
-        private System.Windows.Forms.ToolStripMenuItem themeToolStripMenuItem; // Новое
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3; // Новое
-        private System.Windows.Forms.ToolStripMenuItem increaseFontToolStripMenuItem; // Новое
-        private System.Windows.Forms.ToolStripMenuItem decreaseFontToolStripMenuItem; // Новое
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ViewSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem themeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem increaseFontToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem decreaseFontToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem databaseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem SaveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem objectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ReferenceToolStripMenuItem;

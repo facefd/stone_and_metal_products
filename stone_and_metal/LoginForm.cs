@@ -1,5 +1,4 @@
-﻿// LoginForm.cs
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace stone_and_metal
@@ -11,8 +10,13 @@ namespace stone_and_metal
             InitializeComponent();
         }
 
-        public string Login => textBoxLogin.Text;
-        public string Password => textBoxPassword.Text;
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+            DatabaseHelper.InitializeDatabase();
+        }
+
+        public string Login => textBoxLogin?.Text ?? string.Empty;
+        public string Password => textBoxPassword?.Text ?? string.Empty;
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
@@ -21,7 +25,6 @@ namespace stone_and_metal
                 MessageBox.Show("Введите логин и пароль!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
             if (DatabaseHelper.ValidateLogin(Login, Password))
             {
                 MessageBox.Show("Вход успешен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -37,7 +40,10 @@ namespace stone_and_metal
         private void buttonRegister_Click(object sender, EventArgs e)
         {
             var registerForm = new RegisterForm();
-            registerForm.ShowDialog();
+            if (registerForm.ShowDialog() == DialogResult.OK)
+            {
+                // Обновлять не нужно
+            }
         }
 
         private void linkLabelRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

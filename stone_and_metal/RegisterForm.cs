@@ -11,6 +11,12 @@ namespace stone_and_metal
             InitializeComponent();
         }
 
+        private void RegisterForm_Load(object sender, EventArgs e)
+        {
+            // Инициализируем БД
+            DatabaseHelper.InitializeDatabase();
+        }
+
         public string NewLogin => textBoxNewLogin.Text;
         public string NewPassword => textBoxNewPassword.Text;
         public string ConfirmPassword => textBoxConfirmPassword.Text;
@@ -39,6 +45,11 @@ namespace stone_and_metal
             {
                 MessageBox.Show("Пользователь с таким логином уже существует!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void RegisterForm_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

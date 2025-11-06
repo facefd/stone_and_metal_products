@@ -34,7 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -106,7 +108,16 @@
     <Compile Include="Reports.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ResourceHelper.cs" />
+    <Compile Include="Reports.Designer.cs">
+      <DependentUpon>Reports.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReportsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportsForm.Designer.cs">
+      <DependentUpon>ReportsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReportsHelper.cs" />
     <Compile Include="Saved.cs" />
     <Compile Include="Settings.cs">
       <SubType>Form</SubType>
@@ -154,6 +165,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports.resx">
       <DependentUpon>Reports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportsForm.resx">
+      <DependentUpon>ReportsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
