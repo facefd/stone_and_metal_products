@@ -22,5 +22,16 @@ namespace stone_and_metal.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\\stone_and_metal.acc" +
+            "db;Persist Security Info=True")]
+        public string stone_and_metalConnectionString {
+            get {
+                return ((string)(this["stone_and_metalConnectionString"]));
+            }
+        }
     }
 }

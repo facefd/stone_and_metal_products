@@ -1,5 +1,4 @@
-﻿// Program.cs
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace stone_and_metal
@@ -9,20 +8,19 @@ namespace stone_and_metal
         [STAThread]
         static void Main()
         {
-            try
-            {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-                var loginForm = new LoginForm();
+            using (var loginForm = new LoginForm())
+            {
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
                     Application.Run(new Form1());
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Критическая ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                {
+                    Application.Exit();
+                }
             }
         }
     }

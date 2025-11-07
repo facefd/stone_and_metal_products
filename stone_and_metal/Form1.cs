@@ -180,7 +180,7 @@ namespace stone_and_metal
 
         private void reportsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var reports = new Reports();
+            var reports = new Reports(); // ← Было: new ReportsForm();
             reports.ShowDialog();
         }
 

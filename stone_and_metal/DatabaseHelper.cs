@@ -108,7 +108,7 @@ namespace stone_and_metal
                     string sql = "SELECT COUNT(*) FROM [Users] WHERE [Login] = ?";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@login", login ?? string.Empty);
+                        cmd.Parameters.AddWithValue("", login ?? string.Empty); // ← Без имени!
                         int count = Convert.ToInt32(cmd.ExecuteScalar());
                         return count > 0;
                     }
@@ -135,8 +135,8 @@ namespace stone_and_metal
                     string sql = "INSERT INTO [Users] ([Login], [Password]) VALUES (?, ?)";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@login", login ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@password", password ?? string.Empty);
+                        cmd.Parameters.AddWithValue("", login ?? string.Empty); // ← Без имени!
+                        cmd.Parameters.AddWithValue("", password ?? string.Empty); // ← Без имени!
                         cmd.ExecuteNonQuery();
                         return true;
                     }
@@ -162,8 +162,8 @@ namespace stone_and_metal
                     string sql = "SELECT COUNT(*) FROM [Users] WHERE [Login] = ? AND [Password] = ?";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@login", login ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@password", password ?? string.Empty);
+                        cmd.Parameters.AddWithValue("", login ?? string.Empty); // ← Без имени!
+                        cmd.Parameters.AddWithValue("", password ?? string.Empty); // ← Без имени!
                         int count = Convert.ToInt32(cmd.ExecuteScalar());
                         return count > 0;
                     }
@@ -189,8 +189,8 @@ namespace stone_and_metal
                     string sql = "INSERT INTO [Data] ([Name], [Value]) VALUES (?, ?)";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@name", name ?? string.Empty);
-                        cmd.Parameters.AddWithValue("@value", value ?? string.Empty);
+                        cmd.Parameters.AddWithValue("", name ?? string.Empty); // ← Без имени!
+                        cmd.Parameters.AddWithValue("", value ?? string.Empty); // ← Без имени!
                         cmd.ExecuteNonQuery();
                     }
                 }

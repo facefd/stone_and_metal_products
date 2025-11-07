@@ -31,10 +31,10 @@ namespace stone_and_metal
             linkLabelDev2Email.Text = "Email: iDK@example.com";
             linkLabelDev2Phone.Text = "Телефон: +8 (800) 555-35-35";
 
-            labelDev3Name.Text = "Имя: Сидоров С.С.";
+            labelDev3Name.Text = "Имя: Чертенков Е.М.";
             labelDev3Position.Text = "Должность: Фондовый акционер, Тестировщик";
-            linkLabelDev3Email.Text = "Email: sidorov@example.com";
-            linkLabelDev3Phone.Text = "Телефон: +7 (123) 456-78-92";
+            linkLabelDev3Email.Text = "Email: egorchertila@gmail.com";
+            linkLabelDev3Phone.Text = "Телефон: +7 (910) 119-98-12";
 
             panelDev1.BackColor = Color.FromArgb(240, 240, 240);
             panelDev2.BackColor = Color.FromArgb(245, 245, 245);

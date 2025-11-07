@@ -42,7 +42,7 @@ namespace stone_and_metal
             var registerForm = new RegisterForm();
             if (registerForm.ShowDialog() == DialogResult.OK)
             {
-                // Обновлять не нужно
+                // Можно обновить что-то, но пока не обязательно
             }
         }
 
