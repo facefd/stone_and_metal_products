@@ -1,16 +1,9 @@
-﻿namespace stone_and_metal
+﻿// Reports.Designer.cs
+namespace stone_and_metal
 {
     partial class Reports
     {
-        /// <summary>
-        /// Обязательный метод для поддержки конструктора — не изменяй вручную!
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Освободить все используемые ресурсы.
-        /// </summary>
-        /// <param name="disposing">истинно, если управляемый ресурс должен быть удален; иначе ложно.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,19 +13,14 @@
             base.Dispose(disposing);
         }
 
-        #region Код, автоматически созданный конструктором форм Windows
-
-        /// <summary>
-        /// Требуемый метод для поддержки конструктора — не изменяйте
-        /// содержимое этого метода с помощью редактора кода.
-        /// </summary>
         private void InitializeComponent()
         {
             this.comboBoxReportType = new System.Windows.Forms.ComboBox();
             this.buttonGenerateReport = new System.Windows.Forms.Button();
-            this.textBoxFilterName = new System.Windows.Forms.TextBox();
-            this.textBoxFilterValue = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.labelDateRange = new System.Windows.Forms.Label();
+            this.dateTimeFrom = new System.Windows.Forms.DateTimePicker();
+            this.dateTimeTo = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -42,39 +30,19 @@
             this.comboBoxReportType.FormattingEnabled = true;
             this.comboBoxReportType.Location = new System.Drawing.Point(12, 12);
             this.comboBoxReportType.Name = "comboBoxReportType";
-            this.comboBoxReportType.Size = new System.Drawing.Size(200, 21);
+            this.comboBoxReportType.Size = new System.Drawing.Size(300, 21);
             this.comboBoxReportType.TabIndex = 0;
-            this.comboBoxReportType.SelectedIndexChanged += new System.EventHandler(this.ComboBoxReportType_SelectedIndexChanged);
+            this.comboBoxReportType.SelectedIndexChanged += new System.EventHandler(this.comboBoxReportType_SelectedIndexChanged);
             // 
             // buttonGenerateReport
             // 
-            this.buttonGenerateReport.Location = new System.Drawing.Point(218, 10);
+            this.buttonGenerateReport.Location = new System.Drawing.Point(318, 10);
             this.buttonGenerateReport.Name = "buttonGenerateReport";
             this.buttonGenerateReport.Size = new System.Drawing.Size(100, 23);
             this.buttonGenerateReport.TabIndex = 1;
             this.buttonGenerateReport.Text = "Сформировать";
             this.buttonGenerateReport.UseVisualStyleBackColor = true;
-            this.buttonGenerateReport.Click += new System.EventHandler(this.ButtonGenerateReport_Click);
-            // 
-            // textBoxFilterName
-            // 
-            this.textBoxFilterName.Location = new System.Drawing.Point(12, 40);
-            this.textBoxFilterName.Name = "textBoxFilterName";
-            this.textBoxFilterName.Size = new System.Drawing.Size(150, 20);
-            this.textBoxFilterName.TabIndex = 2;
-            this.textBoxFilterName.Text = "Имя...";
-            this.textBoxFilterName.Enter += new System.EventHandler(this.textBoxFilterName_Enter);
-            this.textBoxFilterName.Leave += new System.EventHandler(this.textBoxFilterName_Leave);
-            // 
-            // textBoxFilterValue
-            // 
-            this.textBoxFilterValue.Location = new System.Drawing.Point(170, 40);
-            this.textBoxFilterValue.Name = "textBoxFilterValue";
-            this.textBoxFilterValue.Size = new System.Drawing.Size(150, 20);
-            this.textBoxFilterValue.TabIndex = 3;
-            this.textBoxFilterValue.Text = "Значение...";
-            this.textBoxFilterValue.Enter += new System.EventHandler(this.textBoxFilterValue_Enter);
-            this.textBoxFilterValue.Leave += new System.EventHandler(this.textBoxFilterValue_Leave);
+            this.buttonGenerateReport.Click += new System.EventHandler(this.buttonGenerateReport_Click);
             // 
             // dataGridView1
             // 
@@ -84,17 +52,41 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(12, 70);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(560, 300);
-            this.dataGridView1.TabIndex = 4;
+            this.dataGridView1.Size = new System.Drawing.Size(760, 300);
+            this.dataGridView1.TabIndex = 2;
+            // 
+            // labelDateRange
+            // 
+            this.labelDateRange.AutoSize = true;
+            this.labelDateRange.Location = new System.Drawing.Point(12, 45);
+            this.labelDateRange.Name = "labelDateRange";
+            this.labelDateRange.Size = new System.Drawing.Size(153, 13);
+            this.labelDateRange.TabIndex = 3;
+            this.labelDateRange.Text = "Период (для подходящих отчётов):";
+            // 
+            // dateTimeFrom
+            // 
+            this.dateTimeFrom.Location = new System.Drawing.Point(170, 42);
+            this.dateTimeFrom.Name = "dateTimeFrom";
+            this.dateTimeFrom.Size = new System.Drawing.Size(120, 20);
+            this.dateTimeFrom.TabIndex = 4;
+            // 
+            // dateTimeTo
+            // 
+            this.dateTimeTo.Location = new System.Drawing.Point(296, 42);
+            this.dateTimeTo.Name = "dateTimeTo";
+            this.dateTimeTo.Size = new System.Drawing.Size(120, 20);
+            this.dateTimeTo.TabIndex = 5;
             // 
             // Reports
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 382);
+            this.ClientSize = new System.Drawing.Size(784, 382);
+            this.Controls.Add(this.dateTimeTo);
+            this.Controls.Add(this.dateTimeFrom);
+            this.Controls.Add(this.labelDateRange);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.textBoxFilterValue);
-            this.Controls.Add(this.textBoxFilterName);
             this.Controls.Add(this.buttonGenerateReport);
             this.Controls.Add(this.comboBoxReportType);
             this.Name = "Reports";
@@ -105,12 +97,11 @@
             this.PerformLayout();
         }
 
-        #endregion
-
         private System.Windows.Forms.ComboBox comboBoxReportType;
         private System.Windows.Forms.Button buttonGenerateReport;
-        private System.Windows.Forms.TextBox textBoxFilterName;
-        private System.Windows.Forms.TextBox textBoxFilterValue;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Label labelDateRange;
+        private System.Windows.Forms.DateTimePicker dateTimeFrom;
+        private System.Windows.Forms.DateTimePicker dateTimeTo;
     }
 }

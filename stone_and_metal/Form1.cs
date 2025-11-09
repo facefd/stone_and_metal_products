@@ -13,20 +13,21 @@ namespace stone_and_metal
         private string accessDatabasePath;
         private DataTable dataTable;
         private string connectionString;
+        private string _userRole;
 
-        public Form1()
+        public Form1(string userRole = "user")
         {
             InitializeComponent();
+            _userRole = userRole;
 
             string debugPath = Path.Combine(Application.StartupPath, "stone_and_metal.accdb");
             string projectPath = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\..\stone_and_metal.accdb"));
-
             if (File.Exists(debugPath))
                 accessDatabasePath = debugPath;
             else if (File.Exists(projectPath))
                 accessDatabasePath = projectPath;
             else
-                throw new FileNotFoundException("Файл базы данных stone_and_metal.accdb не найден ни в bin\\Debug, ни в корне проекта.");
+                throw new FileNotFoundException("Файл базы данных stone_and_metal.accdb не найден...");
 
             connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={accessDatabasePath};";
             dataTable = new DataTable("Таблица1");
@@ -35,8 +36,19 @@ namespace stone_and_metal
         private void Form1_Load(object sender, EventArgs e)
         {
             LoadData();
-            // Применить текущую тему при загрузке (по умолчанию светлая)
             ThemeManager.ApplyCurrentTheme(this, dataGridView1, btnSave, menuStrip1);
+
+            if (_userRole != "admin")
+            {
+                foreach (ToolStripItem item in databaseToolStripMenuItem.DropDownItems)
+                {
+                    if (item.Text.Contains("Сохранить копию"))
+                    {
+                        item.Visible = false;
+                        break;
+                    }
+                }
+            }
         }
 
         private void LoadData()
@@ -52,7 +64,6 @@ namespace stone_and_metal
                         adapter.Fill(dataTable);
                     }
                 }
-
                 dataGridView1.DataSource = dataTable;
             }
             catch (Exception ex)
@@ -83,63 +94,47 @@ namespace stone_and_metal
             }
         }
 
-        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
+        // === Меню ===
+        private void productsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Filter = "Файлы Access (*.accdb;*.mdb)|*.accdb;*.mdb|Все файлы (*.*)|*.*",
-                Title = "Выберите файл базы данных"
-            };
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    string newDatabasePath = openFileDialog.FileName;
-
-                    if (!File.Exists(newDatabasePath))
-                    {
-                        MessageBox.Show("Файл базы данных не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    string tableName = GetFirstTableName(newDatabasePath);
-                    if (string.IsNullOrEmpty(tableName))
-                    {
-                        MessageBox.Show("В базе данных нет таблиц.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    accessDatabasePath = newDatabasePath;
-                    connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={accessDatabasePath};";
-
-                    LoadData();
-
-                    MessageBox.Show($"База данных успешно подключена:\n{accessDatabasePath}\nТаблица: {tableName}",
-                        "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка подключения к базе:\n{ex.Message}",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            var f = new ProductsForm();
+            f.ShowDialog();
         }
 
-        private void connectBDToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ordersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"✅ База данных подключена.\nПуть: {accessDatabasePath}",
-                "Инфо", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var f = new OrdersForm();
+            f.ShowDialog();
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void feedbacksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            var f = new FeedbacksForm();
+            f.ShowDialog();
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void objectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            btnSave_Click(sender, e);
+            var f = new AccountingObjects();
+            f.ShowDialog();
+        }
+
+        private void ReferenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var f = new ReferenceBooks();
+            f.ShowDialog();
+        }
+
+        private void reportsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var f = new Reports();
+            f.ShowDialog();
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var saved = new Saved(accessDatabasePath);
+            saved.ExportToCSV(dataTable);
         }
 
         private void SavedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -166,52 +161,12 @@ namespace stone_and_metal
             cert.ShowDeveloperInfo();
         }
 
-        private void objectToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var accountingObjects = new AccountingObjects();
-            accountingObjects.ShowDialog();
+            Application.Exit();
         }
 
-        private void ReferenceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var referenceBooks = new ReferenceBooks();
-            referenceBooks.ShowDialog();
-        }
-
-        private void reportsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var reports = new Reports(); // ← Было: new ReportsForm();
-            reports.ShowDialog();
-        }
-
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var saved = new Saved(accessDatabasePath);
-            saved.ExportToCSV(dataTable);
-        }
-
-        private string GetFirstTableName(string databasePath)
-        {
-            string connStr = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={databasePath};";
-            using (var conn = new OleDbConnection(connStr))
-            {
-                conn.Open();
-                var tables = conn.GetSchema("Tables");
-                foreach (DataRow row in tables.Rows)
-                {
-                    string tableName = row["TABLE_NAME"].ToString();
-                    if (!tableName.StartsWith("MSys"))
-                    {
-                        return tableName;
-                    }
-                }
-            }
-            return null;
-        }
-
-        // =============== НОВОЕ: Вид ===============
-
-        // Подменю: Настройки
+        // === Вид ===
         private void ViewSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var settings = new Settings(accessDatabasePath);
@@ -221,27 +176,24 @@ namespace stone_and_metal
             }
         }
 
-        // Подменю: Тема
         private void themeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ThemeManager.ToggleTheme(this, dataGridView1, btnSave, menuStrip1);
         }
 
-        // Подменю: Увеличить шрифт
         private void increaseFontToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var currentFont = this.Font;
-            this.Font = new Font(currentFont.FontFamily, currentFont.Size + 1, currentFont.Style);
+            var f = this.Font;
+            this.Font = new Font(f.FontFamily, f.Size + 1, f.Style);
             dataGridView1.Font = new Font(dataGridView1.Font.FontFamily, dataGridView1.Font.Size + 1);
         }
 
-        // Подменю: Уменьшить шрифт
         private void decreaseFontToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var currentFont = this.Font;
-            if (currentFont.Size > 6) // Минимальный размер
+            var f = this.Font;
+            if (f.Size > 6)
             {
-                this.Font = new Font(currentFont.FontFamily, currentFont.Size - 1, currentFont.Style);
+                this.Font = new Font(f.FontFamily, f.Size - 1, f.Style);
                 dataGridView1.Font = new Font(dataGridView1.Font.FontFamily, dataGridView1.Font.Size - 1);
             }
             else
@@ -250,18 +202,70 @@ namespace stone_and_metal
             }
         }
 
-        // Заглушки
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e) { }
-        private void menuToolStripMenuItem_Click(object sender, EventArgs e) { }
-        private void Site_reportsToolStripMenuItem_Click(object sender, EventArgs e) { }
-        private void dataToolStripMenuItem_Click(object sender, EventArgs e) { }
-        private void database1DataSetBindingSource_CurrentChanged(object sender, EventArgs e) { }
-        private void DataBaseToolStripMenuItem_Click(object sender, EventArgs e) { }
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e) { btnSave_Click(sender, e); }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        // === Прочее ===
+        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog d = new OpenFileDialog
+            {
+                Filter = "Файлы Access (*.accdb;*.mdb)|*.accdb;*.mdb|Все файлы (*.*)|*.*",
+                Title = "Выберите файл базы данных"
+            };
+            if (d.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    string newDb = d.FileName;
+                    if (!File.Exists(newDb))
+                    {
+                        MessageBox.Show("Файл не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    string table = GetFirstTableName(newDb);
+                    if (string.IsNullOrEmpty(table))
+                    {
+                        MessageBox.Show("В базе нет таблиц.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    accessDatabasePath = newDb;
+                    connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={accessDatabasePath};";
+                    LoadData();
+                    MessageBox.Show($"База подключена:\n{accessDatabasePath}\nТаблица: {table}",
+                        "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка:\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
+
+        private void connectBDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"База подключена.\nПуть: {accessDatabasePath}", "Инфо", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnSave_Click(sender, e);
+        }
+
+        private string GetFirstTableName(string dbPath)
+        {
+            string connStr = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={dbPath};";
+            using (var conn = new OleDbConnection(connStr))
+            {
+                conn.Open();
+                var tables = conn.GetSchema("Tables");
+                foreach (DataRow row in tables.Rows)
+                {
+                    string name = row["TABLE_NAME"].ToString();
+                    if (!name.StartsWith("MSys")) return name;
+                }
+            }
+            return null;
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e) { }
     }
 }

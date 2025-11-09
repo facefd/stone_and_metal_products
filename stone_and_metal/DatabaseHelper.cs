@@ -1,4 +1,5 @@
-﻿using System;
+﻿// DatabaseHelper.cs
+using System;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -7,14 +8,6 @@ using System.Windows.Forms;
 
 namespace stone_and_metal
 {
-    public class DataItem
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public DateTime Timestamp { get; set; }
-    }
-
     public static class DatabaseHelper
     {
         private static readonly string StoneAndMetalDbPath = Path.Combine(Application.StartupPath, "stone_and_metal.accdb");
@@ -23,54 +16,114 @@ namespace stone_and_metal
         public static void InitializeDatabase()
         {
             if (!File.Exists(StoneAndMetalDbPath))
-            {
                 MessageBox.Show($"Файл {StoneAndMetalDbPath} не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
             if (!File.Exists(ProfileDbPath))
-            {
                 MessageBox.Show($"Файл {ProfileDbPath} не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            CreateDataTableIfNotExists();
+
+            CreateRequiredTablesInStoneAndMetal();
+            EnsureUserRoleInProfile();
         }
 
-        private static void CreateDataTableIfNotExists()
+        private static void CreateRequiredTablesInStoneAndMetal()
         {
             string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={StoneAndMetalDbPath};";
+            var tablesToCreate = new Dictionary<string, string>
+            {
+                ["Products"] = @"
+                    CREATE TABLE [Products] (
+                        [Id] COUNTER PRIMARY KEY,
+                        [Name] TEXT(255),
+                        [Description] MEMO,
+                        [IsProducedNow] YESNO,
+                        [Category] TEXT(100)
+                    )",
+                ["Orders"] = @"
+                    CREATE TABLE [Orders] (
+                        [Id] COUNTER PRIMARY KEY,
+                        [ProductId] LONG,
+                        [ClientName] TEXT(255),
+                        [OrderDate] DATETIME,
+                        [PlannedCompletionDate] DATETIME,
+                        [ActualCompletionDate] DATETIME,
+                        [TotalPrice] CURRENCY,
+                        [IsPaid] YESNO,
+                        [Status] TEXT(50),
+                        [CancelReason] MEMO
+                    )",
+                ["Feedbacks"] = @"
+                    CREATE TABLE [Feedbacks] (
+                        [Id] COUNTER PRIMARY KEY,
+                        [OrderId] LONG,
+                        [FeedbackDate] DATETIME,
+                        [Type] TEXT(50),
+                        [Comment] MEMO
+                    )"
+            };
+
             using (var conn = new OleDbConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    var tables = conn.GetSchema("Tables");
-                    bool tableExists = false;
-                    foreach (DataRow row in tables.Rows)
+                    var existingTables = new HashSet<string>();
+                    foreach (DataRow row in conn.GetSchema("Tables").Rows)
                     {
-                        if (row["TABLE_NAME"].ToString() == "Data")
-                        {
-                            tableExists = true;
-                            break;
-                        }
+                        string name = row["TABLE_NAME"].ToString();
+                        if (!name.StartsWith("MSys")) existingTables.Add(name);
                     }
 
-                    if (!tableExists)
+                    foreach (var kvp in tablesToCreate)
                     {
-                        string createSql = @"
-                            CREATE TABLE [Data] (
-                                Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                Name TEXT NOT NULL,
-                                Value TEXT NOT NULL,
-                                Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-                            )";
-                        using (var cmd = new OleDbCommand(createSql, conn))
+                        string name = kvp.Key;
+                        string sql = kvp.Value;
+                        if (!existingTables.Contains(name))
                         {
-                            cmd.ExecuteNonQuery();
+                            using (var cmd = new OleDbCommand(sql, conn))
+                                cmd.ExecuteNonQuery();
                         }
-                        MessageBox.Show("Таблица [Data] создана!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при создании таблицы: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Ошибка при создании таблиц: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private static void EnsureUserRoleInProfile()
+        {
+            string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={ProfileDbPath};";
+            using (var conn = new OleDbConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    bool hasRoleColumn = false;
+                    var schema = conn.GetSchema("Columns", new[] { null, null, "Users", null });
+                    foreach (DataRow row in schema.Rows)
+                    {
+                        if (row["COLUMN_NAME"].ToString() == "Role")
+                        {
+                            hasRoleColumn = true;
+                            break;
+                        }
+                    }
+
+                    if (!hasRoleColumn)
+                    {
+                        using (var cmd = new OleDbCommand("ALTER TABLE [Users] ADD COLUMN [Role] TEXT(20)", conn))
+                            cmd.ExecuteNonQuery();
+
+                        using (var cmd = new OleDbCommand("UPDATE [Users] SET [Role] = 'admin' WHERE [Id] = (SELECT MIN([Id]) FROM [Users])", conn))
+                        {
+                            try { cmd.ExecuteNonQuery(); }
+                            catch { /* Игнор */ }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при обновлении Users: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -85,20 +138,12 @@ namespace stone_and_metal
             return true;
         }
 
-        public static bool CheckStoneAndMetalDatabaseExists()
-        {
-            return CheckDatabaseExists(StoneAndMetalDbPath);
-        }
-
-        public static bool CheckProfileDatabaseExists()
-        {
-            return CheckDatabaseExists(ProfileDbPath);
-        }
+        public static bool CheckStoneAndMetalDatabaseExists() => CheckDatabaseExists(StoneAndMetalDbPath);
+        public static bool CheckProfileDatabaseExists() => CheckDatabaseExists(ProfileDbPath);
 
         public static bool UserExists(string login)
         {
             if (!CheckProfileDatabaseExists()) return false;
-
             string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={ProfileDbPath};";
             using (var conn = new OleDbConnection(connectionString))
             {
@@ -108,7 +153,7 @@ namespace stone_and_metal
                     string sql = "SELECT COUNT(*) FROM [Users] WHERE [Login] = ?";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("", login ?? string.Empty); // ← Без имени!
+                        cmd.Parameters.AddWithValue("", login ?? string.Empty);
                         int count = Convert.ToInt32(cmd.ExecuteScalar());
                         return count > 0;
                     }
@@ -125,18 +170,17 @@ namespace stone_and_metal
         {
             if (!CheckProfileDatabaseExists()) return false;
             if (UserExists(login)) return false;
-
             string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={ProfileDbPath};";
             using (var conn = new OleDbConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    string sql = "INSERT INTO [Users] ([Login], [Password]) VALUES (?, ?)";
+                    string sql = "INSERT INTO [Users] ([Login], [Password], [Role]) VALUES (?, ?, 'user')";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("", login ?? string.Empty); // ← Без имени!
-                        cmd.Parameters.AddWithValue("", password ?? string.Empty); // ← Без имени!
+                        cmd.Parameters.AddWithValue("", login ?? string.Empty);
+                        cmd.Parameters.AddWithValue("", password ?? string.Empty);
                         cmd.ExecuteNonQuery();
                         return true;
                     }
@@ -149,93 +193,33 @@ namespace stone_and_metal
             }
         }
 
-        public static bool ValidateLogin(string login, string password)
+        public static (bool success, string role) ValidateLogin(string login, string password)
         {
-            if (!CheckProfileDatabaseExists()) return false;
-
+            if (!CheckProfileDatabaseExists()) return (false, "");
             string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={ProfileDbPath};";
             using (var conn = new OleDbConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    string sql = "SELECT COUNT(*) FROM [Users] WHERE [Login] = ? AND [Password] = ?";
+                    string sql = "SELECT [Role] FROM [Users] WHERE [Login] = ? AND [Password] = ?";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("", login ?? string.Empty); // ← Без имени!
-                        cmd.Parameters.AddWithValue("", password ?? string.Empty); // ← Без имени!
-                        int count = Convert.ToInt32(cmd.ExecuteScalar());
-                        return count > 0;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка при проверке логина: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-                }
-            }
-        }
-
-        public static void SaveData(string name, string value)
-        {
-            if (!CheckStoneAndMetalDatabaseExists()) return;
-
-            string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={StoneAndMetalDbPath};";
-            using (var conn = new OleDbConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    string sql = "INSERT INTO [Data] ([Name], [Value]) VALUES (?, ?)";
-                    using (var cmd = new OleDbCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("", name ?? string.Empty); // ← Без имени!
-                        cmd.Parameters.AddWithValue("", value ?? string.Empty); // ← Без имени!
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка при сохранении данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        public static List<DataItem> GetData(string sortBy = "Timestamp")
-        {
-            var list = new List<DataItem>();
-            if (!CheckStoneAndMetalDatabaseExists()) return list;
-
-            string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={StoneAndMetalDbPath};";
-            using (var conn = new OleDbConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    string sql = $"SELECT * FROM [Data] ORDER BY [{sortBy}]";
-                    using (var cmd = new OleDbCommand(sql, conn))
-                    {
-                        using (var reader = cmd.ExecuteReader())
+                        cmd.Parameters.AddWithValue("", login ?? string.Empty);
+                        cmd.Parameters.AddWithValue("", password ?? string.Empty);
+                        var result = cmd.ExecuteScalar();
+                        if (result != null && result != DBNull.Value)
                         {
-                            while (reader.Read())
-                            {
-                                list.Add(new DataItem
-                                {
-                                    Id = Convert.ToInt32(reader["Id"]),
-                                    Name = reader["Name"].ToString(),
-                                    Value = reader["Value"].ToString(),
-                                    Timestamp = Convert.ToDateTime(reader["Timestamp"])
-                                });
-                            }
+                            return (true, result.ToString());
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при получении данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Ошибка при входе: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            return list;
+            return (false, "");
         }
     }
 }

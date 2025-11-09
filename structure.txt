@@ -1,0 +1,81 @@
+﻿╤ЄЁєъЄєЁр яряюъ
+╤хЁшщэ√щ эюьхЁ Єюьр: DA72-4DF9
+C:.
+|   .gitattributes
+|   .gitignore
+|   managment.sln
+|   README.md
+|   stone_and_metal_ъюяш .accdb
+|   structure.txt
+|   
+\---stone_and_metal
+    |   AboutBox.cs
+    |   AboutBox.Designer.cs
+    |   AboutBox.resx
+    |   AccountingObjects.cs
+    |   AccountingObjects.resx
+    |   App.config
+    |   Certificate.cs
+    |   DatabaseHelper.cs
+    |   DataExporter.cs
+    |   DataExporter.resx
+    |   DataForm.cs
+    |   DataForm.Designer.cs
+    |   DataForm.resx
+    |   DeveloperInfo.cs
+    |   DeveloperInfo.Designer.cs
+    |   DeveloperInfo.resx
+    |   Exporter.cs
+    |   Form1.cs
+    |   Form1.Designer.cs
+    |   Form1.resx
+    |   help.txt
+    |   HelpForm.cs
+    |   HelpForm.Designer.cs
+    |   HelpForm.resx
+    |   LoginForm.cs
+    |   LoginForm.Designer.cs
+    |   LoginForm.resx
+    |   LogoStoneAndMetal.ico
+    |   packages.config
+    |   profile.accdb
+    |   Program.cs
+    |   ReferenceBooks.cs
+    |   ReferenceBooks.resx
+    |   RegisterForm.cs
+    |   RegisterForm.Designer.cs
+    |   RegisterForm.resx
+    |   Reports.cs
+    |   Reports.Designer.cs
+    |   Reports.resx
+    |   Saved.cs
+    |   Settings.cs
+    |   Settings.resx
+    |   stone_and_metal.accdb
+    |   stone_and_metal.csproj
+    |   stone_and_metal.laccdb
+    |   stone_and_metalDataSet.Designer.cs
+    |   stone_and_metalDataSet.xsc
+    |   stone_and_metalDataSet.xsd
+    |   stone_and_metalDataSet.xss
+    |   ThemeManager.cs
+    |   
+    +---bin
+    |   \---Debug
+    +---image
+    |       LogoStoneAndMetal.ico
+    |       
+    +---obj
+    |   \---Debug
+    |       |   .NETFramework,Version=v4.8.AssemblyAttributes.cs
+    |       |   DesignTimeResolveAssemblyReferencesInput.cache
+    |       |   stone_and_metal.csproj.AssemblyReference.cache
+    |       |   
+    |       \---TempPE
+    \---Properties
+            AssemblyInfo.cs
+            Resources.Designer.cs
+            Resources.resx
+            Settings.Designer.cs
+            Settings.settings
+            

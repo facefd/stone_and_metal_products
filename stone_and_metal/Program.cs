@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Program.cs
+using System;
 using System.Windows.Forms;
 
 namespace stone_and_metal
@@ -15,7 +16,7 @@ namespace stone_and_metal
             {
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
-                    Application.Run(new Form1());
+                    Application.Run(new Form1(loginForm.UserRole));
                 }
                 else
                 {

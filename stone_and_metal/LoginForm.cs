@@ -1,10 +1,13 @@
-﻿using System;
+﻿// LoginForm.cs
+using System;
 using System.Windows.Forms;
 
 namespace stone_and_metal
 {
     public partial class LoginForm : Form
     {
+        public string UserRole { get; private set; } = "user";
+
         public LoginForm()
         {
             InitializeComponent();
@@ -25,9 +28,11 @@ namespace stone_and_metal
                 MessageBox.Show("Введите логин и пароль!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (DatabaseHelper.ValidateLogin(Login, Password))
+
+            var (success, role) = DatabaseHelper.ValidateLogin(Login, Password);
+            if (success)
             {
-                MessageBox.Show("Вход успешен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                UserRole = role;
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -40,10 +45,7 @@ namespace stone_and_metal
         private void buttonRegister_Click(object sender, EventArgs e)
         {
             var registerForm = new RegisterForm();
-            if (registerForm.ShowDialog() == DialogResult.OK)
-            {
-                // Можно обновить что-то, но пока не обязательно
-            }
+            registerForm.ShowDialog();
         }
 
         private void linkLabelRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

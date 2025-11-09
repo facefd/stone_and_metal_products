@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Reports.cs — обновлённая версия по ТЗ
+using System;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
@@ -9,134 +9,38 @@ using System.Windows.Forms;
 
 namespace stone_and_metal
 {
-    // Локальный класс данных — только для отчётов
-    public class ReportItem
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }   // ← Изделия
-        public string Value { get; set; }  // ← Цена (как строка)
-    }
-
     public partial class Reports : Form
     {
-        private string _databasePath;
+        private string _dbPath;
 
         public Reports()
         {
-            _databasePath = Path.Combine(Application.StartupPath, "stone_and_metal.accdb");
             InitializeComponent();
+            _dbPath = Path.Combine(Application.StartupPath, "stone_and_metal.accdb");
         }
 
-        // === Получение первого подходящего имени таблицы ===
-        private string GetFirstUserTableName()
+        private void Reports_Load(object sender, EventArgs e)
         {
-            if (!File.Exists(_databasePath))
+            comboBoxReportType.Items.Clear();
+            comboBoxReportType.Items.AddRange(new[]
             {
-                MessageBox.Show("Файл базы данных не найден!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
-            }
-
-            string connStr = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={_databasePath};";
-            using (var conn = new OleDbConnection(connStr))
-            {
-                try
-                {
-                    conn.Open();
-                    DataTable schemaTable = conn.GetSchema("Tables");
-                    foreach (DataRow row in schemaTable.Rows)
-                    {
-                        string tableName = row["TABLE_NAME"].ToString();
-                        // Пропускаем системные таблицы
-                        if (!tableName.StartsWith("MSys") && !tableName.StartsWith("~"))
-                        {
-                            return tableName;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка при чтении структуры базы:\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            return null;
+                "Изделия, производимые сейчас",
+                "Заказы за период",
+                "Изделия с максимальным доходом за период"
+            });
+            dateTimeFrom.Value = DateTime.Now.AddMonths(-1);
+            dateTimeTo.Value = DateTime.Now;
         }
 
-        // === Загрузка данных из найденной таблицы ===
-        private List<ReportItem> LoadReportData(string tableName)
+        private void comboBoxReportType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var list = new List<ReportItem>();
-            string connStr = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={_databasePath};";
-
-            using (var conn = new OleDbConnection(connStr))
-            {
-                try
-                {
-                    conn.Open();
-                    // Пытаемся выбрать нужные столбцы — если их нет, покажем ошибку
-                    string sql = $"SELECT [Код], [Изделия], [Цена] FROM [{tableName}]";
-                    using (var cmd = new OleDbCommand(sql, conn))
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            list.Add(new ReportItem
-                            {
-                                Id = reader["Код"] is DBNull ? 0 : Convert.ToInt32(reader["Код"]),
-                                Name = reader["Изделия"]?.ToString() ?? "",
-                                Value = reader["Цена"]?.ToString() ?? ""
-                            });
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"❌ Ошибка загрузки данных из таблицы '{tableName}':\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            return list;
+            bool showDateRange = comboBoxReportType.SelectedItem?.ToString() != "Изделия, производимые сейчас";
+            labelDateRange.Visible = showDateRange;
+            dateTimeFrom.Visible = showDateRange;
+            dateTimeTo.Visible = showDateRange;
         }
 
-        // === Парсинг цены ===
-        private double ParsePrice(string priceString)
-        {
-            if (string.IsNullOrWhiteSpace(priceString)) return 0;
-            string clean = priceString.Replace(" ", "").Replace(",", ".").Replace("₽", "").Trim();
-            return double.TryParse(clean, NumberStyles.Any, CultureInfo.InvariantCulture, out double result) ? result : 0;
-        }
-
-        // === Обработчики текстбоксов ===
-        private void textBoxFilterName_Enter(object sender, EventArgs e)
-        {
-            if (textBoxFilterName.Text == "Имя...") textBoxFilterName.Text = "";
-        }
-
-        private void textBoxFilterName_Leave(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(textBoxFilterName.Text)) textBoxFilterName.Text = "Имя...";
-        }
-
-        private void textBoxFilterValue_Enter(object sender, EventArgs e)
-        {
-            if (textBoxFilterValue.Text == "Значение...") textBoxFilterValue.Text = "";
-        }
-
-        private void textBoxFilterValue_Leave(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(textBoxFilterValue.Text)) textBoxFilterValue.Text = "Значение...";
-        }
-
-        // === Логика отчётов ===
-        private void ComboBoxReportType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string reportType = comboBoxReportType.SelectedItem?.ToString();
-            textBoxFilterName.Visible = (reportType == "Фильтр по имени");
-            textBoxFilterValue.Visible = (reportType == "Фильтр по значению");
-
-            if (!textBoxFilterName.Visible) textBoxFilterName.Text = "Имя...";
-            if (!textBoxFilterValue.Visible) textBoxFilterValue.Text = "Значение...";
-        }
-
-        private void ButtonGenerateReport_Click(object sender, EventArgs e)
+        private void buttonGenerateReport_Click(object sender, EventArgs e)
         {
             if (comboBoxReportType.SelectedIndex == -1)
             {
@@ -144,75 +48,85 @@ namespace stone_and_metal
                 return;
             }
 
-            string tableName = GetFirstUserTableName();
-            if (string.IsNullOrEmpty(tableName))
-            {
-                MessageBox.Show("Не удалось определить таблицу для отчётов.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            var data = LoadReportData(tableName);
             string reportType = comboBoxReportType.SelectedItem.ToString();
 
-            switch (reportType)
+            try
             {
-                case "Все записи":
-                    dataGridView1.DataSource = data;
-                    break;
-                case "Сумма по значению (если числовые данные)":
-                    dataGridView1.DataSource = data
-                        .Where(x => !string.IsNullOrEmpty(x.Value))
-                        .GroupBy(x => x.Name)
-                        .Select(g => new { Изделие = g.Key, ОбщаяСтоимость = g.Sum(x => ParsePrice(x.Value)) })
-                        .ToList();
-                    break;
-                case "Количество по имени":
-                    dataGridView1.DataSource = data
-                        .GroupBy(x => x.Name)
-                        .Select(g => new { Изделие = g.Key, Количество = g.Count() })
-                        .ToList();
-                    break;
-                case "Фильтр по имени":
-                    string nameFilter = textBoxFilterName.Text.Trim();
-                    if (string.IsNullOrEmpty(nameFilter) || nameFilter == "Имя...")
+                using (var conn = new OleDbConnection($"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={_dbPath};"))
+                {
+                    conn.Open();
+
+                    if (reportType == "Изделия, производимые сейчас")
                     {
-                        MessageBox.Show("Введите имя изделия для фильтрации.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        string sql = @"
+                            SELECT Id, Name AS [Название], Category AS [Категория], Description AS [Описание]
+                            FROM Products
+                            WHERE IsProducedNow = True";
+                        var dt = new DataTable();
+                        using (var adapter = new OleDbDataAdapter(sql, conn))
+                            adapter.Fill(dt);
+                        dataGridView1.DataSource = dt;
                     }
-                    dataGridView1.DataSource = data
-                        .Where(x => !string.IsNullOrEmpty(x.Name) && x.Name.IndexOf(nameFilter, StringComparison.OrdinalIgnoreCase) >= 0)
-                        .ToList();
-                    break;
-                case "Фильтр по значению":
-                    string valueFilter = textBoxFilterValue.Text.Trim();
-                    if (string.IsNullOrEmpty(valueFilter) || valueFilter == "Значение...")
+                    else if (reportType == "Заказы за период")
                     {
-                        MessageBox.Show("Введите значение (например, цену) для фильтрации.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        DateTime from = dateTimeFrom.Value.Date;
+                        DateTime to = dateTimeTo.Value.Date.AddDays(1).AddSeconds(-1);
+
+                        string sql = @"
+                            SELECT 
+                                o.Id AS [№ заказа],
+                                p.Name AS [Изделие],
+                                o.ClientName AS [Клиент],
+                                o.OrderDate AS [Дата заказа],
+                                o.PlannedCompletionDate AS [План],
+                                o.ActualCompletionDate AS [Факт],
+                                o.TotalPrice AS [Стоимость],
+                                o.Status AS [Статус]
+                            FROM Orders o
+                            LEFT JOIN Products p ON o.ProductId = p.Id
+                            WHERE o.OrderDate BETWEEN ? AND ?";
+                        var dt = new DataTable();
+                        using (var cmd = new OleDbCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("", from);
+                            cmd.Parameters.AddWithValue("", to);
+                            using (var adapter = new OleDbDataAdapter(cmd))
+                                adapter.Fill(dt);
+                        }
+                        dataGridView1.DataSource = dt;
                     }
-                    dataGridView1.DataSource = data
-                        .Where(x => !string.IsNullOrEmpty(x.Value) && x.Value.IndexOf(valueFilter, StringComparison.OrdinalIgnoreCase) >= 0)
-                        .ToList();
-                    break;
-                default:
-                    MessageBox.Show("Неизвестный тип отчёта.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    break;
+                    else if (reportType == "Изделия с максимальным доходом за период")
+                    {
+                        DateTime from = dateTimeFrom.Value.Date;
+                        DateTime to = dateTimeTo.Value.Date.AddDays(1).AddSeconds(-1);
+
+                        string sql = @"
+                            SELECT 
+                                p.Name AS [Изделие],
+                                p.Category AS [Категория],
+                                SUM(o.TotalPrice) AS [Общий доход],
+                                COUNT(o.Id) AS [Количество заказов]
+                            FROM Orders o
+                            INNER JOIN Products p ON o.ProductId = p.Id
+                            WHERE o.OrderDate BETWEEN ? AND ?
+                            GROUP BY p.Name, p.Category
+                            ORDER BY [Общий доход] DESC";
+                        var dt = new DataTable();
+                        using (var cmd = new OleDbCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("", from);
+                            cmd.Parameters.AddWithValue("", to);
+                            using (var adapter = new OleDbDataAdapter(cmd))
+                                adapter.Fill(dt);
+                        }
+                        dataGridView1.DataSource = dt;
+                    }
+                }
             }
-        }
-
-        private void Reports_Load(object sender, EventArgs e)
-        {
-            comboBoxReportType.Items.AddRange(new[]
+            catch (Exception ex)
             {
-                "Все записи",
-                "Сумма по значению (если числовые данные)",
-                "Количество по имени",
-                "Фильтр по имени",
-                "Фильтр по значению"
-            });
-
-            textBoxFilterName.Visible = false;
-            textBoxFilterValue.Visible = false;
+                MessageBox.Show($"Ошибка при формировании отчёта:\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

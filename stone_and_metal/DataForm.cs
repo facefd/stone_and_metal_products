@@ -1,4 +1,4 @@
-﻿// DataForm.cs
+﻿// DataForm.cs — ЗАГЛУШКА, чтобы проект собирался
 using System;
 using System.Windows.Forms;
 
@@ -13,36 +13,10 @@ namespace stone_and_metal
 
         private void DataForm_Load(object sender, EventArgs e)
         {
-            // Инициализируем БД
-            DatabaseHelper.InitializeDatabase();
-            RefreshDataGrid();
-        }
-
-        private void buttonSave_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(textBoxName.Text) || string.IsNullOrWhiteSpace(textBoxValue.Text))
-            {
-                MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            DatabaseHelper.SaveData(textBoxName.Text, textBoxValue.Text);
-            RefreshDataGrid();
-
-            textBoxName.Clear();
-            textBoxValue.Clear();
-        }
-
-        private void RefreshDataGrid()
-        {
-            var data = DatabaseHelper.GetData();
-            dataGridView1.DataSource = data;
-        }
-
-        private void buttonSort_Click(object sender, EventArgs e)
-        {
-            var data = DatabaseHelper.GetData(comboBoxSort.SelectedItem?.ToString() ?? "Timestamp");
-            dataGridView1.DataSource = data;
+            // Заглушка — просто показываем сообщение
+            MessageBox.Show("Эта форма больше не используется.\nВсе данные теперь управляются через:\n- Изделия\n- Заказы\n- Отзывы", 
+                "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Close(); // Автоматически закрываем
         }
     }
 }
