@@ -1,5 +1,4 @@
-﻿// Reports.cs — обновлённая версия по ТЗ
-using System;
+﻿using System;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
@@ -16,7 +15,8 @@ namespace stone_and_metal
         public Reports()
         {
             InitializeComponent();
-            _dbPath = Path.Combine(Application.StartupPath, "stone_and_metal.accdb");
+            // Используем указанный путь для поиска базы
+            _dbPath = Path.Combine(@"E:\git\stone_and_metal_products\stone_and_metal", "stone_and_metal.accdb");
         }
 
         private void Reports_Load(object sender, EventArgs e)
@@ -52,6 +52,13 @@ namespace stone_and_metal
 
             try
             {
+                // Проверяем существование файла базы данных
+                if (!File.Exists(_dbPath))
+                {
+                    MessageBox.Show($"Файл базы данных не найден: {_dbPath}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 using (var conn = new OleDbConnection($"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={_dbPath};"))
                 {
                     conn.Open();

@@ -234,6 +234,9 @@
     <EmbeddedResource Include="DeveloperInfo.resx">
       <DependentUpon>DeveloperInfo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FeedbacksForm.resx">
+      <DependentUpon>FeedbacksForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -242,6 +245,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OrdersForm.resx">
+      <DependentUpon>OrdersForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

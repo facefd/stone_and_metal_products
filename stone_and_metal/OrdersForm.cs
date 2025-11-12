@@ -1,5 +1,4 @@
-﻿// OrdersForm.cs
-using System;
+﻿using System;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -16,7 +15,8 @@ namespace stone_and_metal
         public OrdersForm()
         {
             InitializeComponent();
-            _dbPath = Path.Combine(Application.StartupPath, "stone_and_metal.accdb");
+            // Используем путь, определенный в DatabaseHelper, чтобы гарантированно находить БД
+            _dbPath = DatabaseHelper.StoneAndMetalDbPath;
             _ordersTable = new DataTable();
             _productsTable = new DataTable();
             LoadData();
@@ -201,15 +201,53 @@ namespace stone_and_metal
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("", productId);
-                        cmd.Parameters.AddWithValue("", clientName ?? "");
-                        cmd.Parameters.AddWithValue("", orderDate);
-                        cmd.Parameters.AddWithValue("", plannedDate);
-                        cmd.Parameters.AddWithValue("", actualDate.HasValue ? (object)actualDate.Value : DBNull.Value);
-                        cmd.Parameters.AddWithValue("", totalPrice);
-                        cmd.Parameters.AddWithValue("", isPaid);
-                        cmd.Parameters.AddWithValue("", status ?? "В работе");
-                        cmd.Parameters.AddWithValue("", cancelReason ?? "");
+                        var paramProductId = new OleDbParameter();
+                        paramProductId.OleDbType = OleDbType.Integer; // LONG в Access
+                        paramProductId.Value = productId;
+                        cmd.Parameters.Add(paramProductId);
+
+                        var paramClientName = new OleDbParameter();
+                        paramClientName.OleDbType = OleDbType.VarChar; // TEXT в Access
+                        paramClientName.Size = 255;
+                        paramClientName.Value = clientName ?? (object)DBNull.Value;
+                        cmd.Parameters.Add(paramClientName);
+
+                        var paramOrderDate = new OleDbParameter();
+                        paramOrderDate.OleDbType = OleDbType.Date; // DATETIME в Access
+                        paramOrderDate.Value = orderDate;
+                        cmd.Parameters.Add(paramOrderDate);
+
+                        var paramPlannedDate = new OleDbParameter();
+                        paramPlannedDate.OleDbType = OleDbType.Date;
+                        paramPlannedDate.Value = plannedDate;
+                        cmd.Parameters.Add(paramPlannedDate);
+
+                        var paramActualDate = new OleDbParameter();
+                        paramActualDate.OleDbType = OleDbType.Date;
+                        paramActualDate.Value = actualDate.HasValue ? (object)actualDate.Value : DBNull.Value;
+                        cmd.Parameters.Add(paramActualDate);
+
+                        var paramTotalPrice = new OleDbParameter();
+                        paramTotalPrice.OleDbType = OleDbType.Currency; // CURRENCY в Access
+                        paramTotalPrice.Value = totalPrice;
+                        cmd.Parameters.Add(paramTotalPrice);
+
+                        var paramIsPaid = new OleDbParameter();
+                        paramIsPaid.OleDbType = OleDbType.Boolean; // YESNO в Access
+                        paramIsPaid.Value = isPaid;
+                        cmd.Parameters.Add(paramIsPaid);
+
+                        var paramStatus = new OleDbParameter();
+                        paramStatus.OleDbType = OleDbType.VarChar;
+                        paramStatus.Size = 50;
+                        paramStatus.Value = status ?? (object)DBNull.Value;
+                        cmd.Parameters.Add(paramStatus);
+
+                        var paramCancelReason = new OleDbParameter();
+                        paramCancelReason.OleDbType = OleDbType.LongVarChar; // MEMO в Access
+                        paramCancelReason.Value = cancelReason ?? (object)DBNull.Value;
+                        cmd.Parameters.Add(paramCancelReason);
+
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -234,16 +272,58 @@ namespace stone_and_metal
                         WHERE Id = ?";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("", productId);
-                        cmd.Parameters.AddWithValue("", clientName ?? "");
-                        cmd.Parameters.AddWithValue("", orderDate);
-                        cmd.Parameters.AddWithValue("", plannedDate);
-                        cmd.Parameters.AddWithValue("", actualDate.HasValue ? (object)actualDate.Value : DBNull.Value);
-                        cmd.Parameters.AddWithValue("", totalPrice);
-                        cmd.Parameters.AddWithValue("", isPaid);
-                        cmd.Parameters.AddWithValue("", status ?? "В работе");
-                        cmd.Parameters.AddWithValue("", cancelReason ?? "");
-                        cmd.Parameters.AddWithValue("", orderId);
+                        var paramProductId = new OleDbParameter();
+                        paramProductId.OleDbType = OleDbType.Integer;
+                        paramProductId.Value = productId;
+                        cmd.Parameters.Add(paramProductId);
+
+                        var paramClientName = new OleDbParameter();
+                        paramClientName.OleDbType = OleDbType.VarChar;
+                        paramClientName.Size = 255;
+                        paramClientName.Value = clientName ?? (object)DBNull.Value;
+                        cmd.Parameters.Add(paramClientName);
+
+                        var paramOrderDate = new OleDbParameter();
+                        paramOrderDate.OleDbType = OleDbType.Date;
+                        paramOrderDate.Value = orderDate;
+                        cmd.Parameters.Add(paramOrderDate);
+
+                        var paramPlannedDate = new OleDbParameter();
+                        paramPlannedDate.OleDbType = OleDbType.Date;
+                        paramPlannedDate.Value = plannedDate;
+                        cmd.Parameters.Add(paramPlannedDate);
+
+                        var paramActualDate = new OleDbParameter();
+                        paramActualDate.OleDbType = OleDbType.Date;
+                        paramActualDate.Value = actualDate.HasValue ? (object)actualDate.Value : DBNull.Value;
+                        cmd.Parameters.Add(paramActualDate);
+
+                        var paramTotalPrice = new OleDbParameter();
+                        paramTotalPrice.OleDbType = OleDbType.Currency;
+                        paramTotalPrice.Value = totalPrice;
+                        cmd.Parameters.Add(paramTotalPrice);
+
+                        var paramIsPaid = new OleDbParameter();
+                        paramIsPaid.OleDbType = OleDbType.Boolean;
+                        paramIsPaid.Value = isPaid;
+                        cmd.Parameters.Add(paramIsPaid);
+
+                        var paramStatus = new OleDbParameter();
+                        paramStatus.OleDbType = OleDbType.VarChar;
+                        paramStatus.Size = 50;
+                        paramStatus.Value = status ?? (object)DBNull.Value;
+                        cmd.Parameters.Add(paramStatus);
+
+                        var paramCancelReason = new OleDbParameter();
+                        paramCancelReason.OleDbType = OleDbType.LongVarChar;
+                        paramCancelReason.Value = cancelReason ?? (object)DBNull.Value;
+                        cmd.Parameters.Add(paramCancelReason);
+
+                        var paramOrderId = new OleDbParameter();
+                        paramOrderId.OleDbType = OleDbType.Integer;
+                        paramOrderId.Value = orderId;
+                        cmd.Parameters.Add(paramOrderId);
+
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -264,7 +344,11 @@ namespace stone_and_metal
                     string sql = "DELETE FROM Orders WHERE Id = ?";
                     using (var cmd = new OleDbCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("", id);
+                        var paramId = new OleDbParameter();
+                        paramId.OleDbType = OleDbType.Integer;
+                        paramId.Value = id;
+                        cmd.Parameters.Add(paramId);
+
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -273,6 +357,11 @@ namespace stone_and_metal
             {
                 MessageBox.Show($"Ошибка удаления заказа:\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void OrdersForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

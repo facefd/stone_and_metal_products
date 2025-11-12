@@ -231,5 +231,10 @@ namespace stone_and_metal
                 MessageBox.Show($"Ошибка удаления отзыва:\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void FeedbacksForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
