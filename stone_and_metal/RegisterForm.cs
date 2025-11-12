@@ -1,5 +1,4 @@
-﻿// RegisterForm.cs
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace stone_and_metal
@@ -9,12 +8,6 @@ namespace stone_and_metal
         public RegisterForm()
         {
             InitializeComponent();
-        }
-
-        private void RegisterForm_Load(object sender, EventArgs e)
-        {
-            // Инициализируем БД
-            DatabaseHelper.InitializeDatabase();
         }
 
         public string NewLogin => textBoxNewLogin.Text;
@@ -37,6 +30,9 @@ namespace stone_and_metal
 
             if (DatabaseHelper.RegisterUser(NewLogin, NewPassword))
             {
+                int userId = DatabaseHelper.GetUserIdByLogin(NewLogin);
+                DatabaseHelper.LogAction(userId, "Registration", GetLocalIpAddress(), $"Новый пользователь: {NewLogin}");
+
                 MessageBox.Show("Регистрация успешна!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -47,7 +43,24 @@ namespace stone_and_metal
             }
         }
 
-        private void RegisterForm_Load_1(object sender, EventArgs e)
+        private string GetLocalIpAddress()
+        {
+            try
+            {
+                var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return ip.ToString();
+                    }
+                }
+            }
+            catch { }
+            return "Unknown";
+        }
+
+        private void RegisterForm_Load(object sender, EventArgs e)
         {
 
         }

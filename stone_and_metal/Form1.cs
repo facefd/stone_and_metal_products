@@ -30,7 +30,7 @@ namespace stone_and_metal
                 throw new FileNotFoundException("Файл базы данных stone_and_metal.accdb не найден...");
 
             connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={accessDatabasePath};";
-            dataTable = new DataTable("Таблица1");
+            dataTable = new DataTable("Data"); // Используем 'Data'
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -57,11 +57,32 @@ namespace stone_and_metal
             {
                 using (var conn = new OleDbConnection(connectionString))
                 {
-                    string sql = "SELECT * FROM Таблица1";
+                    conn.Open();
+
+                    // Проверяем, существует ли таблица Data
+                    var tables = conn.GetSchema("Tables");
+                    bool tableExists = false;
+                    foreach (DataRow row in tables.Rows)
+                    {
+                        if (row["TABLE_NAME"].ToString() == "Data")
+                        {
+                            tableExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!tableExists)
+                    {
+                        MessageBox.Show("❌ Таблица 'Data' не найдена в базе данных.\n" +
+                                       "Убедитесь, что база содержит таблицу с именем 'Data'.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    string sql = "SELECT * FROM Data"; // Заменили Таблица1 на Data
                     using (var adapter = new OleDbDataAdapter(sql, conn))
                     {
-                        dataTable.Clear();
-                        adapter.Fill(dataTable);
+                        dataTable.Clear(); // Очищаем старые данные
+                        adapter.Fill(dataTable); // Загружаем новые
                     }
                 }
                 dataGridView1.DataSource = dataTable;
@@ -79,7 +100,7 @@ namespace stone_and_metal
                 using (var conn = new OleDbConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM Таблица1";
+                    string sql = "SELECT * FROM Data"; // Заменили Таблица1 на Data
                     using (var adapter = new OleDbDataAdapter(sql, conn))
                     {
                         var commandBuilder = new OleDbCommandBuilder(adapter);
@@ -203,6 +224,7 @@ namespace stone_and_metal
         }
 
         // === Прочее ===
+        // ✅ Починен метод OpenToolStripMenuItem_Click
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog d = new OpenFileDialog
@@ -210,6 +232,7 @@ namespace stone_and_metal
                 Filter = "Файлы Access (*.accdb;*.mdb)|*.accdb;*.mdb|Все файлы (*.*)|*.*",
                 Title = "Выберите файл базы данных"
             };
+
             if (d.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -220,21 +243,58 @@ namespace stone_and_metal
                         MessageBox.Show("Файл не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
+
+                    // Проверяем, есть ли хотя бы одна таблица
                     string table = GetFirstTableName(newDb);
                     if (string.IsNullOrEmpty(table))
                     {
                         MessageBox.Show("В базе нет таблиц.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
+
+                    // Проверяем, есть ли таблица Data в новой БД
+                    string connStr = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={newDb};";
+                    using (var conn = new OleDbConnection(connStr))
+                    {
+                        conn.Open();
+                        bool dataTableExists = false;
+                        var tables = conn.GetSchema("Tables");
+                        foreach (DataRow row in tables.Rows)
+                        {
+                            if (row["TABLE_NAME"].ToString() == "Data")
+                            {
+                                dataTableExists = true;
+                                break;
+                            }
+                        }
+
+                        if (!dataTableExists)
+                        {
+                            MessageBox.Show("❌ Таблица 'Data' не найдена в выбранной базе.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+
+                    // Обновляем путь к базе
                     accessDatabasePath = newDb;
                     connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={accessDatabasePath};";
+
+                    // Создаем новый DataTable с именем 'Data' (как в твоей базе)
+                    dataTable = new DataTable("Data");
+
+                    // Загружаем данные
                     LoadData();
+
+                    // Обновляем тему и шрифт
+                    ThemeManager.ApplyCurrentTheme(this, dataGridView1, btnSave, menuStrip1);
+
+                    // Показываем сообщение
                     MessageBox.Show($"База подключена:\n{accessDatabasePath}\nТаблица: {table}",
                         "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка:\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Ошибка при открытии базы:\n{ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

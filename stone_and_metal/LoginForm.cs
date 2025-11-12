@@ -1,5 +1,4 @@
-﻿// LoginForm.cs
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace stone_and_metal
@@ -32,12 +31,16 @@ namespace stone_and_metal
             var (success, role) = DatabaseHelper.ValidateLogin(Login, Password);
             if (success)
             {
+                int userId = DatabaseHelper.GetUserIdByLogin(Login);
+                DatabaseHelper.LogAction(userId, "Login", GetLocalIpAddress(), $"Роль: {role}");
+
                 UserRole = role;
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else
             {
+                DatabaseHelper.LogAction(-1, "Failed Login", GetLocalIpAddress(), $"Логин: {Login}");
                 MessageBox.Show("Неверный логин или пароль!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -46,11 +49,33 @@ namespace stone_and_metal
         {
             var registerForm = new RegisterForm();
             registerForm.ShowDialog();
+
+            if (registerForm.DialogResult == DialogResult.OK)
+            {
+                this.Activate();
+            }
         }
 
         private void linkLabelRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             buttonRegister_Click(sender, e);
+        }
+
+        private string GetLocalIpAddress()
+        {
+            try
+            {
+                var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        return ip.ToString();
+                    }
+                }
+            }
+            catch { }
+            return "Unknown";
         }
     }
 }

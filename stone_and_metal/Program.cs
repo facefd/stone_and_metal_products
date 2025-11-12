@@ -14,6 +14,7 @@ namespace stone_and_metal
 
             using (var loginForm = new LoginForm())
             {
+                //Application.Run(new Form1(loginForm.UserRole));
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
                     Application.Run(new Form1(loginForm.UserRole));
