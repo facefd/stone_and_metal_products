@@ -11,4 +11,6 @@ C# .NET GitHub Docker MySQL
 Ещё не известно
 
 # Документации
-[текст](https://miro.com/welcomeonboard/UktVVm1Fb2hLbmp6Y3hLanVRWEluNU9aSTNmQTBEWGpmWnJrUDlhSTFEN3ZPdml0Qmd0REtsV0dLNDZpOWpnN3dtMFJpVlA5UlpUVlQ4TVVaVHFWZWx6cGtoZVVmNnBZK0hoVUNpdjdpUzVMM3ZyOTdHcWVkalZjcHN6ZzMxQVl3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=833927878366)
+[канбан](https://miro.com/welcomeonboard/UktVVm1Fb2hLbmp6Y3hLanVRWEluNU9aSTNmQTBEWGpmWnJrUDlhSTFEN3ZPdml0Qmd0REtsV0dLNDZpOWpnN3dtMFJpVlA5UlpUVlQ4TVVaVHFWZWx6cGtoZVVmNnBZK0hoVUNpdjdpUzVMM3ZyOTdHcWVkalZjcHN6ZzMxQVl3VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=833927878366)
+[диаграма Исекавы]()
+[диаграма Ганта]()
